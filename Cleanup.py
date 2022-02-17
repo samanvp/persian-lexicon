@@ -43,7 +43,10 @@ def containsDiacritics(word):
     # For more information please take a look at this page:
     # en.wikipedia.org/wiki/Persian_alphabet
     # Hamze
-    if re.search(r'[\u0621 \u0623 \u0624 \u0625 \u0626 \u0629 \u0654 \u0654 \u065F \u0672-\u0678 \u06C0 \u06C2 \u06C3 \u06D3]', word):
+    if re.search(r'[\u0621 \u0623 \u0624 \u0625 \u0626 \u0654 \u0654 \u065F \u0672-\u0678 \u06C0 \u06C2 \u06C3 \u06D3]', word):
+        return True
+    # Tāʼ marbūṭah (en.wikipedia.org/wiki/Taw#T%C4%81%CA%BC_marb%C5%AB%E1%B9%ADah)
+    if re.search(r'[\u0629, \uFE93, \uFE94]', word):
         return True   
     # Short vowels
     if re.search(r'[\u064E \u064F \u0650]', word):
@@ -55,7 +58,7 @@ def containsDiacritics(word):
     if re.search(r'[\u0651]', word):
         return True
     # Other Characters
-    if re.search(r'[\u06C0 \u0640 \uFDF2 \u2026]', word):
+    if re.search(r'[\u0640 \uFDF2 \u2026]', word):
         return True
     # Zero-width non-joiner: Dropping words with this character feels really wrong but for now it's the quickest solution.
     # en.wikipedia.org/wiki/Zero-width_non-joiner
