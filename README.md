@@ -26,3 +26,46 @@ After applying these filters, we ended up with these number of words per file:
  * 8 letter words: 9335 unique words
  * 9 letter words: 6113 unique words
  * 10 letter words: 3648 unique words
+
+## Filter by part-of-speech tags
+Uppsala Persian Corpus (UPC) is annotated with the following 31 part-of-speech tags:
+
+| Category | Description |
+|---|---|
+|ADJ | Adjective|
+|ADJ_CMPR | Comparative adjective|
+|ADJ_INO | Participle adjective|
+|ADJ_SUP | Superlative adjective|
+|ADJ_VOC | Vocative adjective|
+|ADV | Adverb|
+|ADV_COMP | Adverb of comparison|
+|ADV_I | Adverb of interrogation|
+|ADV_LOC | Adverb of location|
+|ADV_NEG | Adverb of negation|
+|ADV_TIME | Adverb of time|
+|CLITIC | Accusative marker|
+|CON | Conjunction|
+|DELM | Delimiter|
+|DET | Determiner|
+|FW | Foreign Word|
+|INT | Interjection|
+|N_PL | Plural noun|
+|N_SING | Singular noun|
+|NUM | Numeral|
+|N_VOC | Vocative noun|
+|P | Preposition|
+|PREV | Preverbal particle|
+|PRO | Pronoun|
+|SYM | Symbol|
+|V_AUX | Auxiliary verb|
+|V_IMP | Imperative verb|
+|V_PA | Past tense verb|
+|V_PP | Past participle verb|
+|V_PRS | Present tense verb|
+|V_SUB | Subjunctive verb|
+
+You can choose to include only words with certain tags to be included in the output lexicon. For example, the following command:
+```
+python3 Cleanup.py N_PL N_SING  
+```
+will generate the output files that only include singular and plural nouns.
