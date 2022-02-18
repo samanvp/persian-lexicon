@@ -1,6 +1,9 @@
 import re
+import sys
 
-def cleanup(filename):
+UPC_TAGS = ['ADJ', 'ADJ_CMPR', 'ADJ_INO', 'ADJ_SUP', 'ADJ_VOC', 'ADV', 'ADV_COMP', 'ADV_I', 'ADV_LOC', 'ADV_NEG', 'ADV_TIME', 'CLITIC', 'CON', 'DELM', 'DET', 'FW', 'INT', 'N_PL', 'N_SING', 'NUM', 'N_VOC', 'P', 'PREV', 'PRO', 'SYM', 'V_AUX', 'V_IMP', 'V_PA', 'V_PP', 'V_PRS', 'V_SUB']
+
+def cleanup(filename, tags=[]):
     uniqueWords = set()
     with open(filename, 'r', encoding='utf8') as f:
         lines = f.readlines()
@@ -8,7 +11,9 @@ def cleanup(filename):
         for line in lines:
             words = line.split()
             if len(words) == 2:
-                persianWord = words[0].strip()
+                if len(tags) > 0 and  words[1] not in tags:
+                    continue
+                persianWord = words[0].strip().strip('\u200C')
                 if re.search(r'[\u0000-\u007F]', persianWord):
                     continue # Drop any word with ascii letter
                 if re.search(r'[\u06F0-\u06F9 \u0660-\u0669]', persianWord):
@@ -31,7 +36,10 @@ def storeWords(words, filename, length=0):
     else:
         selectedWords = words.copy()
         for word in words:
-            if len(word) != length or containsDiacritics(word):
+            # Zero-width non-joiner character is not counted when calculating lenght of words.
+            # For more info please refer to: en.wikipedia.org/wiki/Zero-width_non-joiner
+            visibleLen = len(word) - len(re.findall(r'[\u200C]', word))
+            if visibleLen != length or containsDiacritics(word):
                 selectedWords.remove(word)
         print('Out of {} words, {} are stored with lenght {}.'.format(len(words), len(selectedWords), length))
     
@@ -60,16 +68,20 @@ def containsDiacritics(word):
     # Other Characters
     if re.search(r'[\u0640 \uFDF2 \u2026]', word):
         return True
-    # Zero-width non-joiner: Dropping words with this character feels really wrong but for now it's the quickest solution.
-    # en.wikipedia.org/wiki/Zero-width_non-joiner
-    if re.search(r'[\u200C]', word):
-        return True   
     return False
 
 def main():
+    tags = []
+    if len(sys.argv) > 1:
+        for i in range(1, len(sys.argv)):
+            if sys.argv[i] not in UPC_TAGS:
+                print('ERORR: Given part-of-speech tags is not one of the UPC tags: {}'.format(sys.argv[i]))
+                exit(1)
+            else:
+                tags.append(sys.argv[i])
     # Input from https://sites.google.com/site/mojganserajicom/home/upc
     inputfile = './data/UPC-2016.txt'
-    words = cleanup(inputfile)
+    words = cleanup(inputfile, tags)
 
     # Words are added very liberally, we only drop ascii codes and digits.
     outputfile = './data/persian-words.txt'
