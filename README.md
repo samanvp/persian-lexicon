@@ -64,7 +64,7 @@ Uppsala Persian Corpus (UPC) is annotated with the following 31 part-of-speech t
 |V_PRS | Present tense verb|
 |V_SUB | Subjunctive verb|
 
-You can choose to include only words with certain tags to be included in the output lexicon. For example, the following command:
+You can choose to include only words with certain tags in the output lexicon files. For example, the following command:
 ```
 python3 Cleanup.py N_PL N_SING  
 ```
